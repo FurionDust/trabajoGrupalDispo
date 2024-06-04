@@ -15,6 +15,7 @@ import com.jimenez.app.databinding.ActivityConstrainBinding
 import com.jimenez.app.logic.usercases.GetAllTopsNewUserCase
 import com.jimenez.app.ui.adapters.NewsAdapter
 import com.jimenez.app.ui.entities.NewsDataUI
+import com.jimenez.app.ui.fragment.MyBottomSheetFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -32,6 +33,7 @@ class ConstrainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initVariables()
+        initListeners()
         initData()
 
 
@@ -55,23 +57,28 @@ class ConstrainActivity : AppCompatActivity() {
         initData()
         binding.refreshRV.isRefreshing = false
 
-        binding.bottomNavigation.setOnItemSelectedListener {item ->
-            when(item.itemId) {
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
                 R.id.listarItem -> {
-                    Snackbar.make(binding.refreshRV,"Item Listar",Snackbar.LENGTH_LONG).show()
-                    
+                    Snackbar.make(binding.refreshRV, "Item Listar", Snackbar.LENGTH_LONG).show()
                     true
                 }
                 R.id.FavItem -> {
-                    Snackbar.make(binding.refreshRV,"Fav Item",Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(binding.refreshRV, "Fav Item", Snackbar.LENGTH_LONG).show()
+                    val bottomSheet = MyBottomSheetFragment()
+                    bottomSheet.show(supportFragmentManager, bottomSheet.tag)
                     true
                 }
                 R.id.NoFavItem -> {
-                    Snackbar.make(binding.refreshRV,"No Fav Item",Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(binding.refreshRV, "No Fav Item", Snackbar.LENGTH_LONG).show()
                     true
                 }
                 else -> false
             }
+        }
+
+        binding.btnInsert.setOnClickListener {
+            addItem()
         }
     }
 
