@@ -1,15 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="#52A5E7"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tvBottomSheet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pruebas"
-        android:textSize="18sp" />
+        android:text="Bottom Sheets"
+        android:textSize="30dp"
+        android:layout_margin="50dp"/>
+
+    <EditText
+        android:id="@+id/etxt_user"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_margin="20dp"
+        android:drawableLeft="@drawable/ic_person_24px"
+        android:hint="Usuario" />
+
+
+    <EditText
+        android:id="@+id/etxt_password"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_margin="20dp"
+        android:drawableLeft="@drawable/ic_lock_24px"
+        android:hint="Password" />
 
 </LinearLayout>
