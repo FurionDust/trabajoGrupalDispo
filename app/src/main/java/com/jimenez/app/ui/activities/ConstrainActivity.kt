@@ -20,11 +20,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 class ConstrainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityConstrainBinding
-    private var items: MutableList<NewsDataUI> = mutableListOf()
+    private val items: MutableList<NewsDataUI> = mutableListOf()
     private lateinit var newsAdapter: NewsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,26 +34,19 @@ class ConstrainActivity : AppCompatActivity() {
         initVariables()
         initListeners()
         initData()
-
-
     }
 
     private fun initVariables() {
         newsAdapter = NewsAdapter(
             { descriptionItem(it) },
-            { deleteItem(it)})
+            { deleteItem(it) }
+        )
         binding.rvTopNews.adapter = newsAdapter
-
-
-       // binding.rvTopNews.layoutManager = LinearLayoutManager(
-        //    this, LinearLayoutManager.HORIZONTAL, false )
         binding.rvTopNews.layoutManager = CarouselLayoutManager()
-
     }
 
     private fun initListeners() {
         binding.rvTopNews.adapter = newsAdapter
-        initData()
         binding.refreshRV.isRefreshing = false
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
@@ -86,17 +78,15 @@ class ConstrainActivity : AppCompatActivity() {
         binding.pgbarLoadData.visibility = View.VISIBLE
 
         lifecycleScope.launch(Dispatchers.IO) {
-
             val resultItems = GetAllTopsNewUserCase().invoke()
 
             withContext(Dispatchers.Main) {
-
                 binding.pgbarLoadData.visibility = View.INVISIBLE
 
                 resultItems.onSuccess {
-                    items = it.toMutableList()
+                    items.clear()
+                    items.addAll(it)
                     newsAdapter.itemList = items
-                    newsAdapter.notifyDataSetChanged()
                 }
 
                 resultItems.onFailure {
@@ -108,33 +98,28 @@ class ConstrainActivity : AppCompatActivity() {
     }
 
     private fun descriptionItem(news: NewsDataUI) {
-        Snackbar.make(binding.refreshRV,news.name,Snackbar.LENGTH_LONG).show()
-
-        /*Log.d("UUID",news.id)
-        val intent = Intent(this, DetailItemActivity::class.java).apply {
-            putExtra("id", news.id)
-        }
-        startActivity(intent)*/
+        Snackbar.make(binding.refreshRV, news.name, Snackbar.LENGTH_LONG).show()
     }
 
     private fun deleteItem(position: Int) {
-        items.removeAt(position)
-        newsAdapter.itemList = items
-        newsAdapter.notifyItemRemoved(position)
+
+        if (position >= 0 && position < items.size) {
+            Log.d("AAA","SI O NO")
+            items.removeAt(position)
+            newsAdapter.itemList = items.toList()
+        }
     }
 
     private fun addItem() {
-        items.add(
-            NewsDataUI(
-                "1",
-                "google.com",
-                "Noticia Mentira",
-                "",
-                "Descripcion fantasma",
-                "ES"
-            )
+        val newItem = NewsDataUI(
+            "1",
+            "google.com",
+            "Noticia Mentira",
+            "",
+            "Descripcion fantasma",
+            "ES"
         )
-        newsAdapter.itemList = items
-        newsAdapter.notifyItemInserted(items.size-1)
+        items.add(newItem)
+        newsAdapter.itemList = items.toList()
     }
 }
